@@ -1,0 +1,26 @@
+unit uCar;
+
+interface
+
+uses uSpyTaxiTypes;
+
+type
+  TCar = class
+  private
+    FCarPosition: TCarPosition;
+    FId: Integer;
+  public
+    constructor Create(const ACarPosition: TCarPosition; const lId: Integer); reintroduce;
+  end;
+
+implementation
+
+{ TCar }
+
+constructor TCar.Create(const ACarPosition: TCarPosition; const lId: Integer);
+begin
+  FCarPosition := ACarPosition;
+  FId := lId;
+end;
+
+end.

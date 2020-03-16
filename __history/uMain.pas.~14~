@@ -1,0 +1,126 @@
+﻿unit uMain;
+
+interface
+
+uses
+  // Пользовательские модули
+  uCarDetector, uSpyTaxiTypes, dxMapItem
+  //
+    , Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, cxGraphics, cxControls, cxLookAndFeels,
+  cxLookAndFeelPainters, dxMapControlTypes,
+  dxMapControlBingMapImageryDataProvider, dxCustomMapItemLayer, dxMapItemLayer,
+  cxClasses, dxMapLayer, dxMapImageTileLayer, dxMapControl, Vcl.ExtCtrls,
+  Vcl.StdCtrls, Vcl.Menus;
+
+type
+  TfrmMain = class(TForm)
+    pnMap: TPanel;
+    pnToolBox: TPanel;
+    mcCarsPlaces: TdxMapControl;
+    mlBingMap: TdxMapImageTileLayer;
+    ilCarsPoints: TdxMapItemLayer;
+    meLog: TMemo;
+    Timer1: TTimer;
+    mmTools: TMainMenu;
+    mmMapsStatesZone: TMenuItem;
+    procedure FormCreate(Sender: TObject);
+    procedure mmMapsStatesZoneClick(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure mcCarsPlacesCenterPointChanged(Sender: TObject);
+  private
+    FCarDetector: TCarDetector;
+    procedure ZoomInToCenterMoscow;
+  public
+    { Public declarations }
+  end;
+
+procedure OnCarDetect(const ACar: TDriver);
+procedure LogMessage(const AErrorStr: string);
+var
+  frmMain: TfrmMain;
+
+implementation
+
+uses uMapStatesZone, uExUtils, uSpyTaxiConst;
+{$R *.dfm}
+
+procedure OnCarDetect(const ACar: TDriver);
+var
+  lCar: TdxMapCustomElement;
+begin
+  if ACar.CarClass <> '"s-class-000000_1x.png"' then
+    Exit;
+
+  frmMain.meLog.Lines.Add(ACar.Id + ' ' + FloatToStr(ACar.CarPosition.Latitude) + ' ' + FloatToStr(ACar.CarPosition.Longitude) +
+    ' ' + ACar.CarClass);
+  lCar := TdxMapCustomElement(frmMain.ilCarsPoints.MapItems.Add(TdxMapCustomElement));
+  lCar.Text := ACar.Id;
+  lCar.Location.Latitude := ACar.CarPosition.Latitude;
+  lCar.Location.Longitude := ACar.CarPosition.Longitude;
+end;
+
+procedure TfrmMain.FormCreate(Sender: TObject);
+begin
+  (mlBingMap.Provider as TdxMapControlBingMapImageryDataProvider).BingKey := constBingAPIKey;
+
+  inherited;
+
+  FCarDetector := TCarDetector.Create;
+  FCarDetector.OnCarDetected := OnCarDetect;
+  FCarDetector.OnLogMessage := LogMessage;
+
+  FormatSETTINGS.DecimalSeparator := '.';
+
+  ZoomInToCenterMoscow;
+end;
+
+procedure LogMessage(const AErrorStr: string);
+begin
+  frmMain.meLog.Lines.Add(AErrorStr);
+end;
+
+procedure TfrmMain.mcCarsPlacesCenterPointChanged(Sender: TObject);
+begin
+  Timer1.Enabled := False;
+  Timer1.Enabled := True;
+end;
+
+procedure TfrmMain.mmMapsStatesZoneClick(Sender: TObject);
+var
+  lfrmStatesZoneMap: TfrmStatesZoneMap;
+begin
+  try
+    lfrmStatesZoneMap := TfrmStatesZoneMap.Create(nil);
+    lfrmStatesZoneMap.ShowModal;
+  finally
+    FreeAndNilEx(lfrmStatesZoneMap);
+  end;
+end;
+
+procedure TfrmMain.Timer1Timer(Sender: TObject);
+var
+  lZone: TZonePosition;
+begin
+  frmMain.ilCarsPoints.MapItems.Clear;
+  lZone.Latitude := mlBingMap.CenterPoint.Latitude;
+  lZone.Longitude := mlBingMap.CenterPoint.Longitude;
+
+  FCarDetector.LoadCars(lZone);
+
+//  Timer1.Enabled := False;
+end;
+
+procedure TfrmMain.ZoomInToCenterMoscow;
+var
+  lGeoRect: TdxMapControlGeoRect;
+begin
+  lGeoRect.TopLeft.Latitude := constCenterMoscowTopLeftLatitude;
+  lGeoRect.TopLeft.Longitude := constCenterMoscowTopLeftLongitude;
+
+  lGeoRect.BottomRight.Latitude := constCenterMoscowRightLatitude;
+  lGeoRect.BottomRight.Longitude := constCenterMoscowRightLongitude;
+  mcCarsPlaces.ZoomToGeoRect(lGeoRect);
+end;
+
+end.

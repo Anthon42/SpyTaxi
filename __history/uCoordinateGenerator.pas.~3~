@@ -1,0 +1,55 @@
+unit uCoordinateGenerator;
+
+interface
+
+uses
+  uSpyTaxiTypes, uDriverContainer
+  //
+    , System.Generics.Collections;
+
+type
+  TCoordinateGenerator = class
+  private
+    FDriversDictionary: TDictionary<string, TDriverContainer>;
+  public
+    function AddDriver(const ADriver: TDriver): Boolean;
+
+    function GenerateCoordinate: TDriverPosition;
+    procedure AfterConstruction; override;
+  end;
+
+implementation
+
+{ TCoordinateGenerator }
+
+function TCoordinateGenerator.AddDriver(const ADriver: TDriver): Boolean;
+var
+  lDriverContainer: TDriverContainer;
+begin
+  Result := False;
+  if not FDriversDictionary.TryGetValue(ADriver.Id, lDriverContainer) then
+  begin
+    lDriverContainer := TDriverContainer.Create(ADriver);
+    FDriversDictionary.Add(ADriver.Id, lDriverContainer);
+    Result := True;
+  end;
+end;
+
+procedure TCoordinateGenerator.AfterConstruction;
+begin
+  inherited;
+  FDriversDictionary := TDictionary<string, TDriverContainer>.Create;
+end;
+
+function TCoordinateGenerator.GenerateCoordinate: TDriverPosition;
+var
+  lDriverContainer: TDriverContainer;
+begin
+  for lDriverContainer in FDriversDictionary.Values  do
+  begin
+
+  end;
+
+end;
+
+end.

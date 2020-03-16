@@ -1,0 +1,50 @@
+﻿unit uDriverContainer;
+
+interface
+
+uses
+  uSpyTaxiTypes;
+
+type
+  TDriverContainer = class
+  strict private
+    FDriver: TTaxiCar;
+    FUsesDriver: Boolean;
+  private
+    function GetIdDriver: string;
+
+    procedure DoGetIdDriverEvent;
+    function GetCarPoisition: TCarPosition;
+  public
+    property  IdDriver:string read GetIdDriver;
+    property  CarPoisition:TCarPosition read GetCarPoisition;
+
+    constructor Create(const ADriver: TTaxiCar);
+  end;
+
+implementation
+
+{ TDriverContainer }
+
+constructor TDriverContainer.Create(const ADriver: TTaxiCar);
+begin
+  FUsesDriver := False;
+  FDriver := ADriver;
+end;
+
+procedure TDriverContainer.DoGetIdDriverEvent;
+begin
+  FUsesDriver := False;
+end;
+
+function TDriverContainer.GetCarPoisition: TCarPosition;
+begin
+  Result := FDriver.CarPosition;
+end;
+
+function TDriverContainer.GetIdDriver: string;
+begin
+  Result := FDriver.Id;
+end;
+
+end.

@@ -1,0 +1,17 @@
+unit uCoordinateGenerator;
+
+interface
+
+uses
+  uSpyTaxiTypes;
+
+type
+
+  TCoordinateGenerator = class
+  public
+    procedure AddDriver();
+  end;
+
+implementation
+
+end.

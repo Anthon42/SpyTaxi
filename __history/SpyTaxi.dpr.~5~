@@ -1,0 +1,43 @@
+program SpyTaxi;
+{$I aist.inc}
+uses
+  Vcl.Forms,
+  uMain in 'uMain.pas' {frmMain},
+  uHttpDownloader in 'uHttpDownloader.pas',
+  uExUtils in 'uExUtils.pas',
+  uCarDetector in 'uCarDetector.pas',
+  uInterfaceObjects in 'uInterfaceObjects.pas',
+  uSpyTaxiTypes in 'uSpyTaxiTypes.pas',
+  uJSONParser in 'uJSONParser.pas',
+  uMapStatesZone in 'uMapStatesZone.pas' {frmStatesZoneMap},
+  uSpyTaxiConst in 'uSpyTaxiConst.pas',
+  uPA in '..\common\uPA.pas' {frPA},
+  uPB in '..\common\uPB.pas' {frPB},
+  uRTTIFunc in '..\common\Utils\uRTTIFunc.pas',
+  EhlibFIB in '..\common\Utils\EhlibFIB.pas',
+  uDM2 in '..\common\uDM2.pas' {DM2: TDataModule},
+  uActivityIndicator in '..\common\uActivityIndicator.pas' {frActivityIndicator},
+  uCommandSymbol in '..\common\Utils\uCommandSymbol.pas',
+  uMKUtils in '..\common\Utils\uMKUtils.pas',
+  uDM in 'uDM.pas' {DM: TDataModule},
+  uMessageLogger in '..\common\Utils\uMessageLogger.pas',
+  uErrorMessageFormatter in '..\common\Utils\uErrorMessageFormatter.pas',
+  uErrorMessage in '..\common\uErrorMessage.pas' {frErrorMessage},
+  uDMReports in '..\common\uDMReports.pas' {DMReports: TDataModule};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmMain, frmMain);
+  Application.CreateForm(TfrmStatesZoneMap, frmStatesZoneMap);
+  Application.CreateForm(TfrPA, frPA);
+  Application.CreateForm(TfrPB, frPB);
+  Application.CreateForm(TDM2, DM2);
+  Application.CreateForm(TfrActivityIndicator, frActivityIndicator);
+  Application.CreateForm(TDM, DM);
+  Application.CreateForm(TfrErrorMessage, frErrorMessage);
+  Application.CreateForm(TDMReports, DMReports);
+  Application.Run;
+end.

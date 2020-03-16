@@ -1,0 +1,82 @@
+unit uCoordinateDownloader;
+
+interface
+
+uses uSpyTaxiTypes, uEventTypes, FIBDatabase, pFIBQuery, pFIBProps, uDataConstantStorage;
+
+type
+  TDownloadCooridnateEvent = procedure(const AZonePosition: TZonePosition) of object;
+
+  TCoordinateUploader = class(TObject)
+  strict private
+    FOnDownloadCooridnate: TDownloadCooridnateEvent;
+    FOnLogMessage: TLogMessageMethod;
+    FDataConstantStorage: TDataConstantStorage;
+
+    trRead: TFIBTransaction;
+    qrRead: TpFIBQuery;
+
+    procedure DoDownloadCooridnate(const AZonePosition: TZonePosition);
+    procedure DoLogMessage(const AValue: string; AEventType: TEventType);
+  public
+    property OnDownloadCooridnate: TDownloadCooridnateEvent read FOnDownloadCooridnate write FOnDownloadCooridnate;
+
+    constructor Create(const ADBConnectionParams: TDBConnectionParams);
+
+    property OnLogMessage: TLogMessageMethod read FOnLogMessage write FOnLogMessage;
+  end;
+
+
+  TDummyDataConstantStorage = class(TDataConstantStorage)
+  public
+    property Database;
+  end;
+
+implementation
+
+uses System.SysUtils;
+
+constructor TCoordinateUploader.Create(const ADBConnectionParams: TDBConnectionParams);
+var
+  lErrorStr: string;
+begin
+  if not TDataConstantStorage.CreateStorage(ADBConnectionParams, nil, FDataConstantStorage, lErrorStr) then
+  begin
+    raise Exception.Create(lErrorStr);
+  end;
+
+  if not FDataConstantStorage.ConnectToDB(lErrorStr) then
+  begin
+    raise Exception.Create(lErrorStr);
+  end;
+
+  trRead := TFIBTransaction.Create(nil);
+  trRead.DefaultDatabase := TDummyDataConstantStorage(FDataConstantStorage).Database;
+
+  qrRead := TpFIBQuery.Create(nil);
+  qrRead.Database := TDummyDataConstantStorage(FDataConstantStorage).Database;
+  qrRead.Transaction := trWrite;
+  qrRead.GoToFirstRecordOnExecute := True;
+  qrRead.Options := [qoStartTransaction];
+  qrRead.Close;
+  qrRead.SQL.Clear;
+
+end;
+
+procedure TCoordinateUploader.DoDownloadCooridnate(const AZonePosition: TZonePosition);
+begin
+  if Assigned(FOnDownloadCooridnate) then
+  begin
+    FOnDownloadCooridnate(AZonePosition);
+  end;
+end;
+
+procedure TCoordinateUploader.DoLogMessage(const AValue: string; AEventType: TEventType);
+begin
+  if Assigned(FOnLogMessage) then
+  begin
+    FOnLogMessage(AValue, AEventType);
+  end;
+end;
+
+end.

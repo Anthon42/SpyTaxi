@@ -1,0 +1,81 @@
+unit uCarDetector;
+
+interface
+
+uses uHttpDownloader, uExUtils, uSpyTaxiTypes, Classes, uJSONParser;
+
+type
+  TCarDetector = class
+  private
+    FHttpDownloader: THttpDownloader;
+    FOnLogMessage: TLogMessageEvent;
+    FTaxiParser: TTaxiParser;
+    FOnCarDetect: TCarDetectEvent;
+
+    procedure DoCarDetectEvent(const ACar: TDriver);
+    procedure DoLogMessage(const AMessage: string);
+  public
+    property OnLogMessage: TLogMessageEvent read FOnLogMessage write FOnLogMessage;
+    property OnCarDetected: TCarDetectEvent read FOnCarDetect write FOnCarDetect;
+
+    procedure LoadCars(const AZonePosition: TZonePosition);
+
+    procedure AfterConstruction; override;
+    procedure BeforeDestruction; override;
+  end;
+
+const
+  constTaxiUrl = 'https://api.wheely.com/v6/services?position=';
+
+implementation
+
+{ TCarDetector }
+
+procedure TCarDetector.AfterConstruction;
+begin
+  inherited;
+  FHttpDownloader := THttpDownloader.Create;
+  FTaxiParser := TTaxiParser.Create;
+end;
+
+procedure TCarDetector.BeforeDestruction;
+begin
+  FreeAndNilEx(FHttpDownloader);
+  inherited;
+end;
+
+procedure TCarDetector.DoCarDetectEvent(const ACar: TDriver);
+begin
+  if Assigned(FOnCarDetect) then
+  begin
+    FOnCarDetect(ACar);
+  end;
+end;
+
+procedure TCarDetector.DoLogMessage(const AMessage: string);
+begin
+  if Assigned(FOnLogMessage) then
+  begin
+    FOnLogMessage(AMessage);
+  end;
+
+end;
+
+procedure TCarDetector.LoadCars(const AZonePosition: TZonePosition);
+var
+  lResponseContent: string;
+  lErrorStr: string;
+begin
+  lResponseContent := '';
+
+  if FHttpDownloader.Get(constTaxiUrl + AZonePosition.LatitudeToStr + ',' + AZonePosition.LongitudeToStr, lResponseContent,
+    lErrorStr) then
+  begin
+    FTaxiParser.OnCarDetected := FOnCarDetect;
+    FTaxiParser.ParseTaxi(lResponseContent);
+  end
+  else
+    DoLogMessage(lErrorStr);
+end;
+
+end.

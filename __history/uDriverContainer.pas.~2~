@@ -1,0 +1,27 @@
+unit uDriverContainer;
+
+interface
+
+uses
+  uSpyTaxiTypes;
+
+type
+  TDriverContainer = class
+  strict private
+  FDriver:TTaxiCar;
+
+  public
+
+    constructor Create(const ADriver:TTaxiCar);
+  end;
+
+implementation
+
+{ TDriverContainer }
+
+constructor TDriverContainer.Create(const ADriver: TTaxiCar);
+begin
+
+end;
+
+end.

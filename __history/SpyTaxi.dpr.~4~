@@ -1,0 +1,20 @@
+program SpyTaxi;
+
+uses
+  Vcl.Forms,
+  uMain in 'uMain.pas' {frmMain},
+  uHttpDownloader in 'uHttpDownloader.pas',
+  uExUtils in 'uExUtils.pas',
+  uCarDetector in 'uCarDetector.pas',
+  uInterfaceObjects in 'uInterfaceObjects.pas',
+  uSpyTaxiTypes in 'uSpyTaxiTypes.pas',
+  uJSONParser in 'uJSONParser.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmMain, frmMain);
+  Application.Run;
+end.

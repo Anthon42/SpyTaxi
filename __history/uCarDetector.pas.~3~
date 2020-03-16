@@ -1,0 +1,74 @@
+unit uCarDetector;
+
+interface
+
+uses uHttpDownloader, uExUtils, uSpyTaxiTypes, Classes;
+
+type
+  TCarDetector = class
+  private
+    FHttpDownloader: THttpDownloader;
+    FOnLogMessage: TLogMessageEvent;
+    procedure DoLogMessage(const AMessage: string);
+  public
+    property OnLogMessage: TLogMessageEvent read FOnLogMessage write FOnLogMessage;
+
+    procedure LoadCars(const AZonePosition: TZonePosition);
+
+    procedure AfterConstruction; override;
+    procedure BeforeDestruction; override;
+  end;
+
+const
+  constTaxiUrl = 'https://tc.mobile.yandex.net/3.0/nearestdrivers?block_id=default';
+
+implementation
+
+{ TCarDetector }
+
+procedure TCarDetector.AfterConstruction;
+begin
+  inherited;
+  FHttpDownloader := THttpDownloader.Create;
+end;
+
+procedure TCarDetector.BeforeDestruction;
+begin
+  FreeAndNilEx(FHttpDownloader);
+  inherited;
+end;
+
+procedure TCarDetector.DoLogMessage(const AMessage: string);
+begin
+  if Assigned(FOnLogMessage) then
+  begin
+    FOnLogMessage(AMessage);
+  end;
+
+end;
+
+procedure TCarDetector.LoadCars(const AZonePosition: TZonePosition);
+var
+  lPostList: TStringList;
+  lResponseContent: string;
+  lErrorStr: string;
+begin
+  lPostList := TStringList.Create;
+
+  lPostList.Add(TJSONContent.GetJSONContent(AZonePosition));
+  try
+
+    if not FHttpDownloader.Post(constTaxiUrl, lPostList, lResponseContent, lErrorStr) then
+    begin
+      DoLogMessage(lErrorStr);
+    end
+    else
+    begin
+
+    end;
+  finally
+    FreeAndNilEx(lPostList);
+  end;
+end;
+
+end.

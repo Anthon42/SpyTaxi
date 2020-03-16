@@ -1,0 +1,102 @@
+﻿unit uMain;
+
+interface
+
+uses
+  // Пользовательские модули
+  uCarDetector, uSpyTaxiTypes, dxMapItem
+  //
+    , Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, cxGraphics, cxControls, cxLookAndFeels,
+  cxLookAndFeelPainters, dxMapControlTypes,
+  dxMapControlBingMapImageryDataProvider, dxCustomMapItemLayer, dxMapItemLayer,
+  cxClasses, dxMapLayer, dxMapImageTileLayer, dxMapControl, Vcl.ExtCtrls,
+  Vcl.StdCtrls;
+
+type
+  TfrmMain = class(TForm)
+    pnMap: TPanel;
+    pnToolBox: TPanel;
+    mcCameraPlaces: TdxMapControl;
+    mlBingMap: TdxMapImageTileLayer;
+    ilPolyLines: TdxMapItemLayer;
+    ilCarsPoints: TdxMapItemLayer;
+    btnGetCars: TButton;
+    meLog: TMemo;
+    Timer1: TTimer;
+    procedure FormCreate(Sender: TObject);
+    procedure btnGetCarsClick(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure mcCameraPlacesCenterPointChanged(Sender: TObject);
+  private
+    FCarDetector: TCarDetector;
+
+  public
+    { Public declarations }
+  end;
+
+var
+  frmMain: TfrmMain;
+
+const
+  constBingAPIKey: string = 'ArlyKldofYxmTMOXnHlmlQ-fbUJHSKAQlI6HRo_owmWYBYsPSwJ-6bwL2uI_P17B';
+  constTaxiFileName = 'Taxi_1.png';
+
+implementation
+
+{$R *.dfm}
+
+procedure OnCarDetect(const ACarPosition: TCarPosition; const AColor, AId, APin: string);
+var
+  lCar: TdxMapCustomElement;
+begin
+   if APin <> '"s-class-000000_1x.png"' then
+    Exit;
+
+  frmMain.meLog.Lines.Add(AId + ' ' + FloatToStr(ACarPosition.Latitude) + ' ' + FloatToStr(ACarPosition.Longitude) + ' ' + APin);
+  lCar := TdxMapCustomElement(frmMain.ilCarsPoints.MapItems.Add(TdxMapCustomElement));
+  lCar.Text := AId + ' ' + APin;
+  lCar.Location.Latitude := ACarPosition.Latitude;
+  lCar.Location.Longitude := ACarPosition.Longitude;
+  // lCar.Image.LoadFromFile(constTaxiFileName);
+end;
+
+procedure TfrmMain.btnGetCarsClick(Sender: TObject);
+var
+  lZone: TZonePosition;
+begin
+  meLog.Clear;
+  frmMain.ilCarsPoints.MapItems.Clear;
+  lZone.Latitude := 55.751661;
+  lZone.Longitude := 37.564349;
+
+  FCarDetector.LoadCars(lZone);
+   lZone.Latitude := 55.757265;
+  lZone.Longitude := 37.620637;
+
+  FCarDetector.LoadCars(lZone);
+end;
+
+procedure TfrmMain.FormCreate(Sender: TObject);
+begin
+  (mlBingMap.Provider as TdxMapControlBingMapImageryDataProvider).BingKey := constBingAPIKey;
+
+  inherited;
+
+  FCarDetector := TCarDetector.Create;
+  FCarDetector.OnCarDetected := OnCarDetect;
+
+  FormatSETTINGS.DecimalSeparator := '.';
+end;
+
+procedure TfrmMain.mcCameraPlacesCenterPointChanged(Sender: TObject);
+begin
+  mcCameraPlaces
+end;
+
+procedure TfrmMain.Timer1Timer(Sender: TObject);
+begin
+//  btnGetCars.Click;
+end;
+
+end.

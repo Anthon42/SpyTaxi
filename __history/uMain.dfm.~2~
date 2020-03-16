@@ -1,0 +1,70 @@
+object frmMain: TfrmMain
+  Left = 0
+  Top = 0
+  Caption = 'frmMain'
+  ClientHeight = 593
+  ClientWidth = 844
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pnMap: TPanel
+    Left = 0
+    Top = 0
+    Width = 844
+    Height = 544
+    Align = alClient
+    TabOrder = 0
+    ExplicitWidth = 635
+    ExplicitHeight = 145
+    object mcCameraPlaces: TdxMapControl
+      Left = 1
+      Top = 1
+      Width = 842
+      Height = 542
+      Align = alClient
+      NavigationPanel.ShowMilesScale = False
+      NavigationPanel.Style.CoordinateFont.Charset = DEFAULT_CHARSET
+      NavigationPanel.Style.CoordinateFont.Color = clWindowText
+      NavigationPanel.Style.CoordinateFont.Height = -21
+      NavigationPanel.Style.CoordinateFont.Name = 'Tahoma'
+      NavigationPanel.Style.CoordinateFont.Style = []
+      NavigationPanel.Style.ScaleFont.Charset = DEFAULT_CHARSET
+      NavigationPanel.Style.ScaleFont.Color = clWindowText
+      NavigationPanel.Style.ScaleFont.Height = -16
+      NavigationPanel.Style.ScaleFont.Name = 'Tahoma'
+      NavigationPanel.Style.ScaleFont.Style = []
+      NavigationPanel.Visible = False
+      NavigationPanel.XCoordinateDisplayMask = '0'
+      NavigationPanel.YCoordinateDisplayMask = '0'
+      OptionsBehavior.MapItemSelectMode = mismSingle
+      TabOrder = 0
+      ZoomLevel = 8.000000000000000000
+      ExplicitLeft = 2
+      ExplicitTop = -4
+      object mlBingMap: TdxMapImageTileLayer
+        ProviderClassName = 'TdxMapControlBingMapImageryDataProvider'
+      end
+      object ilPolyLines: TdxMapItemLayer
+        ProjectionClassName = 'TdxMapControlSphericalMercatorProjection'
+      end
+      object ilCameraPoints: TdxMapItemLayer
+        ProjectionClassName = 'TdxMapControlSphericalMercatorProjection'
+      end
+    end
+  end
+  object pnToolBox: TPanel
+    Left = 0
+    Top = 544
+    Width = 844
+    Height = 49
+    Align = alBottom
+    TabOrder = 1
+  end
+end

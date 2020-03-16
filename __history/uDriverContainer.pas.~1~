@@ -1,0 +1,17 @@
+unit uDriverContainer;
+
+interface
+
+uses
+  uSpyTaxiTypes;
+
+type
+  TDriverContainer = class
+  public
+
+    constructor Create();
+  end;
+
+implementation
+
+end.

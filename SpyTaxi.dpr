@@ -1,0 +1,40 @@
+program SpyTaxi;
+{$I aist.inc}
+uses
+  Vcl.Forms,
+  uMain in 'uMain.pas' {frmMain},
+  uHttpDownloader in 'uHttpDownloader.pas',
+  uExUtils in 'uExUtils.pas',
+  uCarDetector in 'uCarDetector.pas',
+  uInterfaceObjects in 'uInterfaceObjects.pas',
+  uSpyTaxiTypes in 'uSpyTaxiTypes.pas',
+  uJSONParser in 'uJSONParser.pas',
+  uMapStatesZone in 'uMapStatesZone.pas' {frmStatesZoneMap},
+  uSpyTaxiConst in 'uSpyTaxiConst.pas',
+  uDataBaseConsts in '..\common\DataBase\uDataBaseConsts.pas',
+  uDataConstantStorage in '..\common\DataBase\uDataConstantStorage.pas',
+  uMKCommonData in '..\common\DataBase\uMKCommonData.pas',
+  uMKData_Items in '..\common\DataBase\uMKData_Items.pas',
+  uMKModifyCommonData in '..\common\DataBase\uMKModifyCommonData.pas',
+  uErrorMessageFormatter in '..\common\Utils\uErrorMessageFormatter.pas',
+  uMKUtils in '..\common\Utils\uMKUtils.pas',
+  uCommandSymbol in '..\common\Utils\uCommandSymbol.pas',
+  uAuthorizationBearerGenerator in 'uAuthorizationBearerGenerator.pas',
+  uDriverContainer in 'uDriverContainer.pas',
+  uCoordinateGenerator in 'uCoordinateGenerator.pas',
+  uCoordinateDownloader in 'uCoordinateDownloader.pas',
+  uEventTypes in '..\common\Utils\uEventTypes.pas',
+  uCommonCreator in '..\RoboVizor\Camera\uCommonCreator.pas',
+  uEventService in '..\RoboVizor\Events\uEventService.pas',
+  uSQLConstantStorage in '..\RoboVizor\DataBase\uSQLConstantStorage.pas',
+  uConsts in '..\RoboVizor\Camera\uConsts.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmMain, frmMain);
+  Application.CreateForm(TfrmStatesZoneMap, frmStatesZoneMap);
+  Application.Run;
+end.

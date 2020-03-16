@@ -1,0 +1,53 @@
+unit uSpyTaxiTypes;
+
+interface
+
+uses System.SysUtils;
+
+type
+  TLogMessageEvent = procedure(const AMessage: string);
+
+  TMapObjectPosition = record
+    Latitude: Double;
+    Longitude: Double;
+    function LatitudeToStr: string;
+    function LongitudeToStr: string;
+  end;
+
+  TCarPosition = TMapObjectPosition;
+  TZonePosition = TMapObjectPosition;
+
+  TWheelyCar = record
+    Id: string;
+    CarPosition: TCarPosition;
+    Color: string;
+//   ласс машины(биснес, преми и т. д.)
+    CarClass: string;
+  end;
+
+  TJSONContent = record
+    class function GetJSONContent(const AZonePosition: TZonePosition): string; static;
+  end;
+
+implementation
+
+class function TJSONContent.GetJSONContent(const AZonePosition: TZonePosition): string;
+begin
+  Result := '{"simplify":true,"classes":["representation"],"id":"000000000000000000000000000000","point":[' +
+    FloatToStr(AZonePosition.Longitude) + ',' + FloatToStr(AZonePosition.Latitude) +
+    '],"supported":["code_dispatch"],"full_adjust_task":true,"current_drivers":[]}';
+end;
+
+{ TMapObjectPosition }
+
+function TMapObjectPosition.LatitudeToStr: string;
+begin
+  Result := FloatToStr(Latitude);
+end;
+
+function TMapObjectPosition.LongitudeToStr: string;
+begin
+  Result := FloatToStr(Longitude);
+end;
+
+end.

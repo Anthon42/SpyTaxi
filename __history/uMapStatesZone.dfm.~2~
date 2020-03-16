@@ -1,0 +1,74 @@
+object frmStatesZoneMap: TfrmStatesZoneMap
+  Left = 0
+  Top = 0
+  Caption = #1050#1072#1088#1090#1072' '#1079#1086#1085
+  ClientHeight = 609
+  ClientWidth = 924
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pnMap: TPanel
+    Left = 0
+    Top = 41
+    Width = 924
+    Height = 568
+    Align = alClient
+    TabOrder = 0
+    ExplicitTop = 0
+    ExplicitHeight = 497
+    object mcCarsPlaces: TdxMapControl
+      Left = 1
+      Top = 1
+      Width = 922
+      Height = 566
+      Align = alClient
+      BorderStyle = cxcbsNone
+      NavigationPanel.ShowMilesScale = False
+      NavigationPanel.Style.CoordinateFont.Charset = DEFAULT_CHARSET
+      NavigationPanel.Style.CoordinateFont.Color = clWindowText
+      NavigationPanel.Style.CoordinateFont.Height = -21
+      NavigationPanel.Style.CoordinateFont.Name = 'Tahoma'
+      NavigationPanel.Style.CoordinateFont.Style = []
+      NavigationPanel.Style.ScaleFont.Charset = DEFAULT_CHARSET
+      NavigationPanel.Style.ScaleFont.Color = clWindowText
+      NavigationPanel.Style.ScaleFont.Height = -16
+      NavigationPanel.Style.ScaleFont.Name = 'Tahoma'
+      NavigationPanel.Style.ScaleFont.Style = []
+      NavigationPanel.Visible = False
+      NavigationPanel.XCoordinateDisplayMask = '0'
+      NavigationPanel.YCoordinateDisplayMask = '0'
+      OptionsBehavior.MapItemSelectMode = mismSingle
+      TabOrder = 0
+      ZoomLevel = 14.000000000000000000
+      ExplicitWidth = 842
+      ExplicitHeight = 358
+      object mlBingMap: TdxMapImageTileLayer
+        ProviderClassName = 'TdxMapControlBingMapImageryDataProvider'
+      end
+      object ilPolyLines: TdxMapItemLayer
+        ProjectionClassName = 'TdxMapControlSphericalMercatorProjection'
+      end
+      object ilCarsPoints: TdxMapItemLayer
+        ProjectionClassName = 'TdxMapControlSphericalMercatorProjection'
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 924
+    Height = 41
+    Align = alTop
+    TabOrder = 1
+    ExplicitLeft = 360
+    ExplicitTop = 400
+    ExplicitWidth = 185
+  end
+end

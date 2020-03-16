@@ -1,0 +1,16 @@
+unit uSpyTaxiConst;
+
+interface
+
+const
+  constBingAPIKey: string = 'ArlyKldofYxmTMOXnHlmlQ-fbUJHSKAQlI6HRo_owmWYBYsPSwJ-6bwL2uI_P17B';
+  constTaxiFileName = 'Taxi_1.png';
+
+  constCenterMoscowTopLeftLatitude = 55.767664;
+  constCenterMoscowTopLeftLongitude = 37.596977;
+
+  constCenterMoscowRightLatitude = 55.744125;
+  constCenterMoscowRightLongitude = 37.658476;
+implementation
+
+end.

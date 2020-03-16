@@ -1,0 +1,87 @@
+object frmMain: TfrmMain
+  Left = 0
+  Top = 0
+  Caption = 'frmMain'
+  ClientHeight = 593
+  ClientWidth = 844
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  Menu = mmTools
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object pnMap: TPanel
+    Left = 0
+    Top = 0
+    Width = 844
+    Height = 360
+    Align = alClient
+    TabOrder = 0
+    object mcCarsPlaces: TdxMapControl
+      Left = 1
+      Top = 1
+      Width = 842
+      Height = 358
+      Align = alClient
+      NavigationPanel.ShowMilesScale = False
+      NavigationPanel.Style.CoordinateFont.Charset = DEFAULT_CHARSET
+      NavigationPanel.Style.CoordinateFont.Color = clWindowText
+      NavigationPanel.Style.CoordinateFont.Height = -21
+      NavigationPanel.Style.CoordinateFont.Name = 'Tahoma'
+      NavigationPanel.Style.CoordinateFont.Style = []
+      NavigationPanel.Style.ScaleFont.Charset = DEFAULT_CHARSET
+      NavigationPanel.Style.ScaleFont.Color = clWindowText
+      NavigationPanel.Style.ScaleFont.Height = -16
+      NavigationPanel.Style.ScaleFont.Name = 'Tahoma'
+      NavigationPanel.Style.ScaleFont.Style = []
+      NavigationPanel.Visible = False
+      NavigationPanel.XCoordinateDisplayMask = '0'
+      NavigationPanel.YCoordinateDisplayMask = '0'
+      OptionsBehavior.MapItemSelectMode = mismSingle
+      TabOrder = 0
+      ZoomLevel = 12.000000000000000000
+      OnCenterPointChanged = mcCarsPlacesCenterPointChanged
+      object mlBingMap: TdxMapImageTileLayer
+        ProviderClassName = 'TdxMapControlBingMapImageryDataProvider'
+      end
+      object ilCarsPoints: TdxMapItemLayer
+        ProjectionClassName = 'TdxMapControlSphericalMercatorProjection'
+      end
+    end
+  end
+  object pnToolBox: TPanel
+    Left = 0
+    Top = 360
+    Width = 844
+    Height = 233
+    Align = alBottom
+    TabOrder = 1
+    object meLog: TMemo
+      Left = 9
+      Top = 6
+      Width = 384
+      Height = 219
+      Lines.Strings = (
+        '')
+      TabOrder = 0
+    end
+  end
+  object Timer1: TTimer
+    OnTimer = Timer1Timer
+    Left = 592
+    Top = 424
+  end
+  object mmTools: TMainMenu
+    Left = 752
+    Top = 440
+    object mmMapsStatesZone: TMenuItem
+      Caption = #1050#1072#1088#1090#1072' '#1079#1086#1085
+      OnClick = mmMapsStatesZoneClick
+    end
+  end
+end

@@ -1,0 +1,25 @@
+unit uCoordinateDownloader;
+
+interface
+
+uses uSpyTaxiTypes;
+
+type
+
+  TCoordinateUploader = class(TObject)
+  public
+    property OnDownloadCooridnate:
+
+    constructor Create(const ALogMessageMethod: TLogMessageMethod);
+  end;
+
+implementation
+
+{ TCoordinateUploader }
+
+constructor TCoordinateUploader.Create(const ALogMessageMethod: TLogMessageMethod);
+begin
+
+end;
+
+end.

@@ -1,0 +1,58 @@
+unit uJSONParser;
+
+interface
+
+uses System.JSON, System.SysUtils;
+
+type
+
+  TTaxiParser = class
+  private
+    FJSONObject: TJSONObject;
+  public
+
+    procedure ParseTaxi(AValue: string);
+
+    procedure AfterConstruction; override;
+  end;
+
+implementation
+
+{ TTaxiParser }
+
+procedure TTaxiParser.AfterConstruction;
+begin
+  inherited;
+  FJSONObject := TJSONObject.Create;
+end;
+
+procedure TTaxiParser.ParseTaxi(AValue: string);
+var
+  lJSONArrayEnum: TJSONArray.TEnumerator;
+  lJSONText: string;
+  lJsonNestedObject: TJSONObject;
+  lJSONPositionObject: TJSONObject;
+  lDriversJSONArray: TJSONArray;
+  lPositionJSONArray: TJSONArray;
+  lIndex: Integer;
+begin
+  FJSONObject.Parse(TEncoding.UTF8.GetBytes(AValue), 0);
+
+  lJSONPositionObject := TJSONObject.Create;
+
+  lDriversJSONArray := FJSONObject.Values['drivers'].AsType<TJSONArray>;
+
+  for lIndex := 0 to lDriversJSONArray.Count - 1 do
+  begin
+    lJSONText := lDriversJSONArray.Items[lIndex].ToString;
+
+    lJSONPositionObject.Parse(TEncoding.UTF8.GetBytes(lJSONText), 0);
+
+    lPositionJSONArray := lJSONPositionObject.Values['positions'].AsType<TJSONArray>;
+
+    lJSONText := lPositionJSONArray.Items[0].ToString;
+  end;
+
+end;
+
+end.

@@ -1,0 +1,27 @@
+unit uCoordinateGenerator;
+
+interface
+
+uses
+  uSpyTaxiTypes, uDriverContainer
+  //
+    , System.Generics.Collections;
+
+type
+  TCoordinateGenerator = class
+  private
+    TDriversDictionary: TDictionary<TDriverContainer>;
+  public
+    procedure AddDriver(const ADriver: TDriver);
+  end;
+
+implementation
+
+{ TCoordinateGenerator }
+
+procedure TCoordinateGenerator.AddDriver(const ADriver: TDriver);
+begin
+
+end;
+
+end.

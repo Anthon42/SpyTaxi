@@ -1,0 +1,54 @@
+﻿unit uCarDetector;
+
+interface
+
+uses uHttpDownloader, uExUtils, uSpyTaxiTypes, Classes;
+
+type
+  TCarDetector = class
+  strict private
+    FHttpDownloader: THttpDownloader;
+  public
+    procedure LoadCars(const AZonePosition: TZonePosition);
+    procedure AfterConstruction; override;
+    procedure BeforeDestruction; override;
+  end;
+
+const
+  constTaxiUrl = 'https://tc.mobile.yandex.net/3.0/nearestdrivers?block_id=default';
+
+implementation
+
+{ TCarDetector }
+
+procedure TCarDetector.AfterConstruction;
+begin
+  inherited;
+  FHttpDownloader := THttpDownloader.Create;
+end;
+
+procedure TCarDetector.BeforeDestruction;
+begin
+  FreeAndNilEx(FHttpDownloader);
+  inherited;
+end;
+
+procedure TCarDetector.LoadCars(const AZonePosition: TZonePosition);
+var
+  lUrl: string;
+  lPostList: TStringList;
+begin
+  lPostList := TStringList.Create;
+
+  lUrl := TJSONContent.GetJSONContent(AZonePosition);
+
+  try
+
+
+    FHttpDownloader.Post(constTaxiUrl, )
+  finally
+    FreeAndNilEx(lPostList);
+  end;
+end;
+
+end.

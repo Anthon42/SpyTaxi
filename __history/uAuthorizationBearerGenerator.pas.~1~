@@ -1,0 +1,40 @@
+unit uAuthorizationBearerGenerator;
+
+interface
+
+uses System.Classes;
+
+type
+  TAuthorizationBearerGenerator = class
+  private
+    FBearerList: TStringList;
+  public
+
+    constructor Create(const AFullName: string);
+    procedure BeforeDestruction; override;
+  end;
+
+implementation
+
+uses System.SysUtils;
+{ TAuthorizationBearerGenerator }
+
+procedure TAuthorizationBearerGenerator.BeforeDestruction;
+begin
+  FreeAndNil(FBearerList);
+  inherited;
+end;
+
+constructor TAuthorizationBearerGenerator.Create(const AFullName: string);
+begin
+  if not FileExists(AFullName) then
+  begin
+    raise Exception.Create('Фaйл ' + AFullName + 'ненайден');
+  end;
+
+  FBearerList := TStringList.Create;
+
+  FBearerList.LoadFromFile(AFullName);
+end;
+
+end.

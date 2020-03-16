@@ -1,0 +1,85 @@
+unit uJSONParser;
+
+interface
+
+uses System.JSON, System.SysUtils, uSpyTaxiTypes, uExUtils, System.Generics.Collections;
+
+type
+  TCarDetectEvent = procedure(const ACarPosition: TCarPosition; const AId: string);
+
+  TTaxiParser = class
+  private
+
+    FOnCarDetect: TCarDetectEvent;
+
+    procedure DoCarDetectEvent(const ACarPosition: TCarPosition; const AId: string);
+  public
+    property OnCarDetected: TCarDetectEvent read FOnCarDetect write FOnCarDetect;
+
+    procedure ParseTaxi(AValue: string);
+
+    procedure AfterConstruction; override;
+  end;
+
+implementation
+
+{ TTaxiParser }
+
+procedure TTaxiParser.AfterConstruction;
+begin
+  inherited;
+end;
+
+procedure TTaxiParser.DoCarDetectEvent(const ACarPosition: TCarPosition; const AId: string);
+begin
+  if Assigned(FOnCarDetect) then
+  begin
+    FOnCarDetect(ACarPosition, AId);
+  end;
+end;
+
+procedure TTaxiParser.ParseTaxi(AValue: string);
+var
+  lJSONObject: TJSONObject;
+  lJSONPositionObject: TJSONObject;
+  lJSONCoordinatesObject: TJSONObject;
+  lDriversJSONArray: TJSONArray;
+  lPositionJSONArray: TJSONArray;
+  lIndex: Integer;
+  lIdDriver: string;
+  lCarPosition: TCarPosition;
+//  lDisplayTariff: string;
+begin
+  // Парсим
+  try
+    lJSONObject := TJSONObject.Create;
+    lJSONObject.Parse(TEncoding.UTF8.GetBytes(AValue), 0);
+    // Создаем массив водителей
+    lDriversJSONArray := lJSONObject.Values['drivers'].AsType<TJSONArray>;
+    // Перебираем массив водителей
+    for lIndex := 0 to lDriversJSONArray.Count - 1 do
+    begin
+      lJSONPositionObject := lDriversJSONArray.Items[lIndex].AsType<TJSONObject>;
+
+      lIdDriver := lJSONPositionObject.Values['id'].ToString;
+
+ //     lDisplayTariff :=  lJSONPositionObject.Values['display_tariff'].ToString;
+
+//      if lDisplayTariff <> '"business"' then continue;
+
+      lPositionJSONArray := lJSONPositionObject.Values['positions'].AsType<TJSONArray>;
+
+      lJSONCoordinatesObject := lPositionJSONArray.Items[0].AsType<TJSONObject>;
+
+      lCarPosition.Longitude := StrToFloat(lJSONCoordinatesObject.Values['lon'].AsType<string>);
+
+      lCarPosition.Latitude := StrToFloat(lJSONCoordinatesObject.Values['lat'].AsType<string>);
+
+      DoCarDetectEvent(lCarPosition, lIdDriver);
+    end;
+  finally
+    FreeAndNilEx(lJSONObject);
+  end;
+end;
+
+end.
